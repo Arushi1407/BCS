@@ -1,0 +1,59 @@
+import numpy as np
+
+# Initialize arrays
+array1 = np.array([])
+array2 = np.array([])
+
+# Input for first array
+while True:
+    input1 = input("Input number to add to array 1 or press 'q' to start inputting in 2nd array: ")
+    if input1.lower() == 'q':
+        break
+    try:
+        array1 = np.append(array1, float(input1))  # Append numeric input
+    except ValueError:
+        print("Please input a valid number.")
+
+# Input for second array
+while True:
+    input2 = input("Input number to add to array 2 or press 'q' to finish: ")
+    if input2.lower() == 'q':
+        break
+    try:
+        array2 = np.append(array2, float(input2))  # Append numeric input
+    except ValueError:
+        print("Please input a valid number.")
+
+operation = input("Enter operation ('dot' or 'matrix'): ").strip().lower()
+
+if operation == 'dot':
+    # Ensure both arrays are the same length for the dot product
+    length = min(len(array1), len(array2))
+    output = sum(array1[i] * array2[i] for i in range(length))
+    print("Dot product result:", output)
+
+elif operation == 'matrix':
+    try:
+        # Reshape 1D arrays into 2D matrices
+        rows1 = int(input("Enter the number of rows for array 1: "))
+        rows2 = int(input("Enter the number of rows for array 2: "))
+        array1 = array1.reshape((rows1, -1))
+        array2 = array2.reshape((rows2, -1))
+
+        # Check if dimensions are compatible for matrix multiplication
+        if array1.shape[1] != array2.shape[0]:
+            print("Matrix multiplication not possible due to incompatible dimensions.")
+        else:
+            # Perform matrix multiplication manually
+            result = [[0 for _ in range(array2.shape[1])] for _ in range(array1.shape[0])]
+            for i in range(len(array1)):  # Rows of array1
+                for j in range(len(array2[0])):  # Columns of array2
+                    for k in range(len(array2)):  # Rows of array2
+                        result[i][j] += array1[i][k] * array2[k][j]
+            print("Matrix multiplication result:")
+            for row in result:
+                print(row)
+    except ValueError:
+        print("Invalid dimensions or reshape operation failed.")
+else:
+    print("Invalid operation entered.")
